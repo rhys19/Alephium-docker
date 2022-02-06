@@ -3,12 +3,12 @@ FROM adoptopenjdk/openjdk11:jre-11.0.11_9
 
 ARG RELEASE=0.0.0
 
-RUN curl -L https://github.com/alephium/alephium/releases/download/v${RELEASE}/alephium-${RELEASE}.jar -o /alephium.jar && \
+RUN curl -L https://github.com/alephium/alephium/releases/download/v${RELEASE}/alephium-1.2.5.jar -o /alephium.jar && \
   mkdir -p /alephium-home && usermod -d /alephium-home nobody && chown nobody /alephium-home && \
-  mkdir -p ~nobody/.alephium && chown nobody ~nobody/.alephium && \
-  mkdir -p ~nobody/.alephium-wallets && chown nobody ~nobody/.alephium-wallets
+  mkdir -p ~/.alephium && chown nobody ~nobody/.alephium && \
+  mkdir -p ~/.alephium-wallets && chown nobody ~/.alephium-wallets
 
-COPY user-mainnet-release.conf /alephium-home/.alephium/user.conf
+COPY user-mainnet-release.conf ~/.alephium/user.conf
 COPY entrypoint.sh /entrypoint.sh
 
 # http
@@ -20,11 +20,11 @@ EXPOSE 10973
 # p2p
 EXPOSE 9973
 
-VOLUME /alephium-home/.alephium
+VOLUME ~/.alephium
 
-VOLUME /alephium-home/.alephium-wallets
+VOLUME ~/.alephium-wallets
 
-USER nobody
+USER root
 
 ENV JAVA_NET_OPTS="-Djava.net.preferIPv4Stack=true"
 ENV JAVA_MEM_OPTS=""
